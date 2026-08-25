@@ -13,7 +13,8 @@ namespace Workshop.Student
         public GameObject[] floorTiles;
         public GameObject[] wallTiles;
         public GameObject[] foodTiles;
-
+        public GameObject[] playerTiles;
+        public GameObject[] exitTiles;
         public string[,] saveItemMap = new string[3, 3] {
             { " ", "Soda", " "},
             { " ", " ", " "},
@@ -23,14 +24,22 @@ namespace Workshop.Student
         // 1. declare Players variable
 
         // 7. declare Exit variable 
-
-
         public void Start()
         {
             // 1. random player at the position <0, 0> map
-
+            int rp = UnityEngine.Random.Range(0, playerTiles.Length);
+            GameObject player = Instantiate(playerTiles[rp], new Vector2(0, 0), Quaternion.identity);
             // 2. create obstacles
-
+            for (int x = 0; x < columns; x+=2)
+            {
+                if (x < columns)
+                {
+                    int y = rows / 2;
+                    int r = UnityEngine.Random.Range(0, wallTiles.Length);
+                    GameObject tile = Instantiate(wallTiles[r], new Vector2(x, y), Quaternion.identity);
+                    tile.name = "obstacles" + x + "_" + y;
+                }
+            }
             // 3. create floor
 
             for (int y = 0; y < rows; y++)
@@ -76,14 +85,27 @@ namespace Workshop.Student
                         {
                             if (foodTiles.name == item)
                             {
-                                Instantiate(foodTiles, new Vector2(x, y), Quaternion.identity);
+                                GameObject food = Instantiate(foodTiles, new Vector2(x, y), Quaternion.identity);
+                                food.name = "Food" + x + "_" + y;
                                 break;
                             }
                         }
                     }
                 }
-                // 7. place exit
-
+            }
+            // 7. place exit
+            for (int y = 0; y < rows; y++)
+            {
+                for (int x = 0; x < columns; x++)
+                {
+                    if (x == columns - 1 && y == rows - 1)
+                    {
+                        GameObject exit = Instantiate(exitTiles[0], new Vector2(x, y), Quaternion.identity);
+                        player.name = "name"+x+"_"+y;
+                        break;
+                        
+                    }
+                }
             }
         }
     }
